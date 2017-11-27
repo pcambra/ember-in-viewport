@@ -1,0 +1,9 @@
+<ul>
+  {{#each models as |val|}}
+    <li><img src={{val}} /></li>
+  {{/each}}
+</ul>
+{{my-component 
+  viewportIntersectionObserverOverride=true
+  class="infinity-component" 
+  infinityLoad=(action "infinityLoad")}}

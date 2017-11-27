@@ -78,11 +78,13 @@ The mixin comes with some options. Due to the way listeners and `requestAnimatio
 export default Ember.Component.extend(InViewportMixin, {
   viewportOptionsOverride: Ember.on('didInsertElement', function() {
     Ember.setProperties(this, {
-      viewportEnabled           : true,
-      viewportUseRAF            : true,
-      viewportSpy               : false,
-      viewportScrollSensitivity : 1,
-      viewportRefreshRate       : 150,
+      viewportEnabled                 : true,
+      viewportUseRAF                  : true,
+      viewportSpy                     : false,
+      viewportUseIntersectionObserver : false,
+      viewportScrollSensitivity       : 1,
+      viewportRefreshRate             : 150,
+      intersectionThreshold           : 1.0,
       viewportTolerance: {
         top    : 50,
         bottom : 50,
@@ -111,6 +113,21 @@ export default Ember.Component.extend(InViewportMixin, {
   Default: `false`
 
   When `true`, the Mixin will continually watch the `Component` and re-fire hooks whenever it enters or leaves the viewport. Because this is expensive, this behaviour is opt-in. When false, the Mixin will only watch the `Component` until it enters the viewport once, and then it sets `viewportEntered` to `true` (permanently), and unbinds listeners. This reduces the load on the Ember run loop and your application.
+
+- `viewportUseIntersectionObserver: boolean`
+
+  Default: `false`
+
+  When `true`, the Mixin will use the IntersectionObserver API. If IntersectionObserver is not supported in the target browser, ember-in-viewport will fallback to rAF. 
+  (https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+  (https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds#Browser_compatibility)
+
+- `intersectionThreshold: decimal`
+
+  Default: 1.0
+
+  A single number or array of numbers between 0.0 and 1.0.  A value of 0.0 means the target will be visible when the first pixel enters the viewport.  A value of 1.0 means the entire target must be visible to fire the didEnterViewport hook.
+  (https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Thresholds)
 
 - `viewportScrollSensitivity: number`
 
@@ -141,12 +158,14 @@ module.exports = function(environment) {
   var ENV = {
     // ...
     viewportConfig: {
-      viewportEnabled           : false,
-      viewportUseRAF            : true,
-      viewportSpy               : false,
-      viewportScrollSensitivity : 1,
-      viewportRefreshRate       : 100,
-      viewportListeners         : [],
+      viewportEnabled                 : false,
+      viewportUseRAF                  : true,
+      viewportSpy                     : false,
+      viewportUseIntersectionObserver : false,
+      viewportScrollSensitivity       : 1,
+      viewportRefreshRate             : 100,
+      viewportListeners               : [],
+      intersectionThreshold           : 1.0,
       viewportTolerance: {
         top    : 0,
         left   : 0,

@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import canUseDOM from 'ember-in-viewport/utils/can-use-dom';
 import canUseRAF from 'ember-in-viewport/utils/can-use-raf';
+import canUseIntersectionObserver from 'ember-in-viewport/utils/can-use-intersection-observer';
 import isInViewport from 'ember-in-viewport/utils/is-in-viewport';
 import checkScrollDirection from 'ember-in-viewport/utils/check-scroll-direction';
 
@@ -24,12 +25,20 @@ const lastDirection = {};
 const lastPosition = {};
 
 export default Mixin.create({
+  /**
+   * IntersectionObserverEntry
+   * 
+   * @property observer
+   * @default null
+   */
+  observer: null,
   viewportExited: not('viewportEntered').readOnly(),
 
   init() {
     this._super(...arguments);
     const options = assign({
       viewportUseRAF: canUseRAF(),
+      viewportUseIntersectionObserver: canUseIntersectionObserver(),
       viewportEntered: false,
       viewportListeners: []
     }, this._buildOptions());
@@ -53,6 +62,9 @@ export default Mixin.create({
   willDestroyElement() {
     this._super(...arguments);
     this._unbindListeners();
+    if (this.observer) {
+      this.observer.unobserve(this.element);
+    }
   },
 
   _buildOptions(defaultOptions = {}) {
@@ -91,22 +103,51 @@ export default Mixin.create({
       return;
     }
 
-    const $contextEl = $(context);
-    const boundingClientRect = element.getBoundingClientRect();
+    if (get(this, 'viewportUseIntersectionObserver')) {
+      const { top, left, bottom, right } = this.viewportTolerance;
+      const options = {
+        root: null, 
+        rootMargin: `${top}px ${right}px ${bottom}px ${left}px`,
+        threshold: this.intersectionThreshold
+      };
 
-    this._triggerDidAccessViewport(
-      isInViewport(
-        boundingClientRect,
-        $contextEl.innerHeight(),
-        $contextEl.innerWidth(),
-        get(this, 'viewportTolerance')
-      )
-    );
+      this.observer = new IntersectionObserver(bind(this, this._onIntersection), options);
+      this.observer.observe(element);
+    } else if (get(this, 'viewportUseRAF')) {
+      const $contextEl = $(context);
+      const boundingClientRect = element.getBoundingClientRect();
 
-    if (boundingClientRect && get(this, 'viewportUseRAF')) {
-      rAFIDS[get(this, 'elementId')] = window.requestAnimationFrame(
-        bind(this, this._setViewportEntered, context)
-      );
+      if (boundingClientRect) {
+        this._triggerDidAccessViewport(
+          isInViewport(
+            boundingClientRect,
+            $contextEl.innerHeight(),
+            $contextEl.innerWidth(),
+            get(this, 'viewportTolerance')
+          )
+        );
+        rAFIDS[get(this, 'elementId')] = window.requestAnimationFrame(
+          bind(this, this._setViewportEntered, context)
+        );
+      }
+    } 
+  },
+
+  /**
+   * callback provided to IntersectionObserver
+   * 
+   * @method _onIntersection
+   * @param {Array} - entries
+   */
+  _onIntersection(entries) {
+    const entry = entries[0];
+
+    if (entry.isIntersecting) {
+      set(this, 'viewportEntered', true);
+      this.trigger('didEnterViewport');
+    } else if (entry.intersectionRatio <= 0) { // exiting viewport
+      set(this, 'viewportEntered', false);
+      this.trigger('didExitViewport');
     }
   },
 

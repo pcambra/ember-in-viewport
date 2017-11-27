@@ -4,6 +4,7 @@ import InViewportMixin from 'ember-in-viewport';
 const {
   Component,
   on,
+  get,
   getProperties, setProperties
 } = Ember;
 
@@ -16,10 +17,12 @@ export default Component.extend(InViewportMixin, {
 
     let {
       viewportSpyOverride,
-      viewportEnabledOverride
+      viewportEnabledOverride,
+      viewportIntersectionObserverOverride,
     } = getProperties(this,
       'viewportSpyOverride',
-      'viewportEnabledOverride'
+      'viewportEnabledOverride',
+      'viewportIntersectionObserverOverride'
     );
 
     if (viewportSpyOverride !== undefined) {
@@ -28,7 +31,16 @@ export default Component.extend(InViewportMixin, {
     if (viewportEnabledOverride !== undefined) {
       options.viewportEnabled = viewportEnabledOverride;
     }
+    if (viewportIntersectionObserverOverride !== undefined) {
+      options.viewportUseIntersectionObserver = viewportIntersectionObserverOverride;
+    }
 
     setProperties(this, options);
-  })
+  }),
+
+  didEnterViewport() {
+    if (get(this, 'infinityLoad')) {
+      get(this, 'infinityLoad')();
+    }
+  }
 });
