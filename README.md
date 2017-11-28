@@ -81,7 +81,7 @@ export default Ember.Component.extend(InViewportMixin, {
       viewportEnabled                 : true,
       viewportUseRAF                  : true,
       viewportSpy                     : false,
-      viewportUseIntersectionObserver : false,
+      viewportUseIntersectionObserver : true,
       viewportScrollSensitivity       : 1,
       viewportRefreshRate             : 150,
       intersectionThreshold           : 1.0,
@@ -102,18 +102,6 @@ export default Ember.Component.extend(InViewportMixin, {
 
   Set to false to have no listeners registered. Useful if you have components that function with either viewport listening on or off.
 
-- `viewportUseRAF: boolean`
-
-  Default: Depends on browser
-
-  As it's name suggests, if this is `true` and the IntersectionObserver API is not available in the target browser, the Mixin will use `requestAnimationFrame` instead of the Ember run loop. Unless you want to force enabling or disabling this, you won't need to override this option.
-
-- `viewportSpy: boolean`
-
-  Default: `false`
-
-  When `true`, the Mixin will continually watch the `Component` and re-fire hooks whenever it enters or leaves the viewport. Because this is expensive, this behaviour is opt-in. When false, the Mixin will only watch the `Component` until it enters the viewport once, and then it sets `viewportEntered` to `true` (permanently), and unbinds listeners. This reduces the load on the Ember run loop and your application.
-
 - `viewportUseIntersectionObserver: boolean`
 
   Default: Depends on browser
@@ -129,6 +117,18 @@ export default Ember.Component.extend(InViewportMixin, {
 
   A single number or array of numbers between 0.0 and 1.0.  A value of 0.0 means the target will be visible when the first pixel enters the viewport.  A value of 1.0 means the entire target must be visible to fire the didEnterViewport hook.
   (https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Thresholds)
+
+- `viewportUseRAF: boolean`
+
+  Default: Depends on browser
+
+  As it's name suggests, if this is `true` and the IntersectionObserver API is not available in the target browser, the Mixin will use `requestAnimationFrame` instead of the Ember run loop. Unless you want to force enabling or disabling this, you won't need to override this option.
+
+- `viewportSpy: boolean`
+
+  Default: `false`
+
+  When `true`, the Mixin will continually watch the `Component` and re-fire hooks whenever it enters or leaves the viewport. Because this is expensive, this behaviour is opt-in. When false, the Mixin will only watch the `Component` until it enters the viewport once, and then it sets `viewportEntered` to `true` (permanently), and unbinds listeners. This reduces the load on the Ember run loop and your application.
 
 - `viewportScrollSensitivity: number`
 
@@ -162,7 +162,7 @@ module.exports = function(environment) {
       viewportEnabled                 : false,
       viewportUseRAF                  : true,
       viewportSpy                     : false,
-      viewportUseIntersectionObserver : false,
+      viewportUseIntersectionObserver : true,
       viewportScrollSensitivity       : 1,
       viewportRefreshRate             : 100,
       viewportListeners               : [],
