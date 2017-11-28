@@ -1,7 +1,12 @@
 import { test } from 'qunit';
 import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 
-moduleForAcceptance('Acceptance | integration');
+moduleForAcceptance('Acceptance | integration', {
+  afterEach() {
+    // bring testem window up to the top for tests that scroll down
+    find(window).scrollTop(0);
+  }
+});
 
 test('Component is active when in viewport', function(assert) {
   assert.expect(1);
@@ -45,7 +50,7 @@ test('Component moves back to inactive when scrolled out of viewport', function(
   visit('/');
 
   andThen(() => {
-    find(window).scrollTop(2000);
+    find('.my-component.bottom').get(0).scrollIntoView();
   });
 
   waitFor('.my-component.top.start-enabled.inactive');

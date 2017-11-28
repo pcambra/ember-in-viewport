@@ -17,7 +17,6 @@ const defaultConfig = {
     bottom: 0,
     right: 0
   },
-  viewportUseIntersectionObserver: false,
   intersectionThreshold: 1.0
 };
 

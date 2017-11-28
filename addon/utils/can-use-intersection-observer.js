@@ -18,10 +18,8 @@ function checkIntersectionObserver(window) {
         }
       });
     }
-
     return true;
   }
-
   return false;
 }
 

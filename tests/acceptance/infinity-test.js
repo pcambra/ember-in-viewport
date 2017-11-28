@@ -3,13 +3,22 @@ import moduleForAcceptance from '../../tests/helpers/module-for-acceptance';
 
 moduleForAcceptance('Acceptance | infinity-basic', {
   afterEach() {
-    // bring testem window up to the top.  This is a minor issue in the other acceptance test
-    // if ran tests in diff order, may see intermittent failures
+    // bring testem window up to the top.  
     find(window).scrollTop(0);
   }
 });
 
-test('Component moves to active when scrolled into viewport', function(assert) {
+test('Component is inactive when not in viewport', function(assert) {
+  assert.expect(1);
+
+  visit('/infinity-basic');
+
+  andThen(() => {
+    assert.ok(find('.infinity-basic.inactive').length);
+  });
+});
+
+test('Component fetches more data when scrolled into viewport', function(assert) {
   visit('/infinity-basic');
 
   andThen(() => {
@@ -21,15 +30,5 @@ test('Component moves to active when scrolled into viewport', function(assert) {
   andThen(() => {
     assert.ok(find('.infinity-basic.inactive').length);
     assert.equal(find('.infinity-svg').length, 20);
-  });
-});
-
-test('Component is inactive when not in viewport', function(assert) {
-  assert.expect(1);
-
-  visit('/infinity-basic');
-
-  andThen(() => {
-    assert.ok(find('.infinity-basic.inactive').length);
   });
 });
