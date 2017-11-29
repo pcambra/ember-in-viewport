@@ -7,7 +7,7 @@
 
 ![Download count all time](https://img.shields.io/npm/dt/ember-in-viewport.svg) [![npm version](https://badge.fury.io/js/ember-in-viewport.svg)](http://badge.fury.io/js/ember-in-viewport) [![Build Status](https://travis-ci.org/DockYard/ember-in-viewport.svg)](https://travis-ci.org/DockYard/ember-in-viewport) [![Ember Observer Score](http://emberobserver.com/badges/ember-in-viewport.svg)](http://emberobserver.com/addons/ember-in-viewport)
 
-This `ember-cli` addon adds a simple, highly performant Ember Mixin to your app. This Mixin, when added to a `View` or `Component` (collectively referred to as `Components`), will allow you to check if that `Component` has entered the browser's viewport. By default, the Mixin uses the `requestAnimationFrame` API if it detects it in your user's browser – failing which, it fallsback to using the Ember run loop and event listeners.
+This `ember-cli` addon adds a simple, highly performant Ember Mixin to your app. This Mixin, when added to a `View` or `Component` (collectively referred to as `Components`), will allow you to check if that `Component` has entered the browser's viewport. By default, the Mixin uses the `IntersectionObserver` API if it detects it in your user's browser – failing which, it fallsback to using `requestAnimationFrame`, then if not available, the Ember run loop and event listeners.
 
 ## Demo
 - App: http://development.ember-in-viewport-demo.divshot.io/
@@ -72,7 +72,7 @@ export default Ember.Component.extend(InViewportMixin, {
 This hook fires whenever the `Component` leaves the viewport.
 
 ### Advanced usage (options)
-The mixin comes with some options. Due to the way listeners and `requestAnimationFrame` is setup, you'll have to override the options this way:
+The mixin comes with some options. Due to the way listeners and `IntersectionObserver API` or `requestAnimationFrame` is setup, you'll have to override the options this way:
 
 ```js
 export default Ember.Component.extend(InViewportMixin, {
@@ -85,6 +85,7 @@ export default Ember.Component.extend(InViewportMixin, {
       viewportScrollSensitivity       : 1,
       viewportRefreshRate             : 150,
       intersectionThreshold           : 1.0,
+      scrollableArea                  : null,
       viewportTolerance: {
         top    : 50,
         bottom : 50,
@@ -146,7 +147,7 @@ export default Ember.Component.extend(InViewportMixin, {
 
   Default: `100`
 
-  If `requestAnimationFrame` is not present, this value determines how often the Mixin checks your component to determine whether or not it has entered or left the viewport. The lower this number, the more often it checks, and the more load is placed on your application. Generally, you'll want this value between `100` to `300`, which is about the range at which people consider things to be "real-time".
+  If `IntersectionObserver` and `requestAnimationFrame` is not present, this value determines how often the Mixin checks your component to determine whether or not it has entered or left the viewport. The lower this number, the more often it checks, and the more load is placed on your application. Generally, you'll want this value between `100` to `300`, which is about the range at which people consider things to be "real-time".
 
   This value also affects how often the Mixin checks scroll direction.
 
@@ -173,6 +174,7 @@ module.exports = function(environment) {
       viewportRefreshRate             : 100,
       viewportListeners               : [],
       intersectionThreshold           : 1.0,
+      scrollableArea                  : null,
       viewportTolerance: {
         top    : 0,
         left   : 0,

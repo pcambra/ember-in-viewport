@@ -14,7 +14,7 @@ test('Component is inactive when not in viewport', function(assert) {
   visit('/infinity-basic');
 
   andThen(() => {
-    assert.ok(find('.infinity-basic.inactive').length);
+    assert.equal(find('.infinity-basic.inactive').length, 1);
   });
 });
 
@@ -22,13 +22,13 @@ test('Component fetches more data when scrolled into viewport', function(assert)
   visit('/infinity-basic');
 
   andThen(() => {
-    assert.ok(find('.infinity-basic.inactive').length);
-    find('.infinity-basic').get(0).scrollIntoView();
     assert.equal(find('.infinity-svg').length, 10);
+    assert.equal(find('.infinity-basic.inactive').length, 1, 'component is inactive before fetching more data');
+    find('.infinity-basic').get(0).scrollIntoView();
   });
 
   andThen(() => {
-    assert.ok(find('.infinity-basic.inactive').length);
     assert.equal(find('.infinity-svg').length, 20);
+    assert.equal(find('.infinity-basic.inactive').length, 1, 'component is inactive after fetching more data');
   });
 });
