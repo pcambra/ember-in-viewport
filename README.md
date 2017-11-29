@@ -118,6 +118,12 @@ export default Ember.Component.extend(InViewportMixin, {
   A single number or array of numbers between 0.0 and 1.0.  A value of 0.0 means the target will be visible when the first pixel enters the viewport.  A value of 1.0 means the entire target must be visible to fire the didEnterViewport hook.
   (https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Thresholds)
 
+- `scrollableArea`
+
+  Default: null
+
+  A CSS selector for the scrollable area.  e.g. `".my-list"`
+
 - `viewportUseRAF: boolean`
 
   Default: Depends on browser

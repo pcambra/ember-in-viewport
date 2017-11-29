@@ -1,12 +1,16 @@
-<ul>
-  {{#each model as |val|}}
-  <div class="infinity-svg">
-    <svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
-      {{{val}}}
-    </svg>
-  </div>
-  {{/each}}
-</ul>
-{{my-component 
-  class="infinity-basic" 
-  infinityLoad=(action "infinityLoad")}}
+<div class="list" style="height: 500px; overflow: scroll;">
+  <ul>
+    {{#each model as |val|}}
+    <div class="infinity-svg">
+      <svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        {{{val}}}
+      </svg>
+    </div>
+    {{/each}}
+  </ul>
+  {{my-component 
+    class="infinity-basic" 
+    scrollableAreaOverride=".list"
+    infinityLoad=(action "infinityLoad")}}
+
+</div>
