@@ -19,10 +19,12 @@ export default Component.extend(InViewportMixin, {
       viewportSpyOverride,
       viewportEnabledOverride,
       viewportIntersectionObserverOverride,
+      scrollableAreaOverride
     } = getProperties(this,
       'viewportSpyOverride',
       'viewportEnabledOverride',
-      'viewportIntersectionObserverOverride'
+      'viewportIntersectionObserverOverride',
+      'scrollableAreaOverride'
     );
 
     if (viewportSpyOverride !== undefined) {
@@ -33,6 +35,9 @@ export default Component.extend(InViewportMixin, {
     }
     if (viewportIntersectionObserverOverride !== undefined) {
       options.viewportUseIntersectionObserver = viewportIntersectionObserverOverride;
+    }
+    if (scrollableAreaOverride !== undefined) {
+      options.scrollableArea = scrollableAreaOverride;
     }
 
     setProperties(this, options);

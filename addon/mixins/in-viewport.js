@@ -96,6 +96,7 @@ export default Mixin.create({
 
   _setViewportEntered(context = null) {
     assert('You must pass a valid context to _setViewportEntered', context);
+    const scrollableArea = this.scrollableArea ? document.querySelector(this.scrollableArea) : null;
 
     const element = get(this, 'element');
 
@@ -106,7 +107,7 @@ export default Mixin.create({
     if (get(this, 'viewportUseIntersectionObserver')) {
       const { top, left, bottom, right } = this.viewportTolerance;
       const options = {
-        root: null, 
+        root: scrollableArea, 
         rootMargin: `${top}px ${right}px ${bottom}px ${left}px`,
         threshold: this.intersectionThreshold
       };
@@ -114,7 +115,7 @@ export default Mixin.create({
       this.observer = new IntersectionObserver(bind(this, this._onIntersection), options);
       this.observer.observe(element);
     } else if (get(this, 'viewportUseRAF')) {
-      const $contextEl = $(context);
+      const $contextEl = scrollableArea ? $(scrollableArea) : $(context);
       const boundingClientRect = element.getBoundingClientRect();
 
       if (boundingClientRect) {
