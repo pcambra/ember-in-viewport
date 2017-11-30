@@ -1,0 +1,52 @@
+<div class="list" style="height: 500px; overflow: scroll;">
+  <ul>
+    {{#each model as |val|}}
+    <div class="infinity-svg">
+      <svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        {{{val}}}
+      </svg>
+    </div>
+    {{/each}}
+  </ul>
+  {{my-component 
+    class="infinity-scrollable" 
+    scrollableAreaOverride=".list"
+    infinityLoad=(action "infinityLoad")}}
+</div>
+
+<div class="list-rAF" style="height: 500px; overflow: scroll;">
+  <ul>
+    {{#each model as |val|}}
+    <div class="infinity-svg-rAF">
+      <svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        {{{val}}}
+      </svg>
+    </div>
+    {{/each}}
+  </ul>
+  {{my-component 
+    class="infinity-scrollable-rAF" 
+    viewportSpyOverride=true
+    viewportIntersectionObserverOverride=false
+    scrollableAreaOverride=".list-rAF"
+    infinityLoad=(action "infinityLoad")}}
+</div>
+
+<div class="list-scrollEvent" style="height: 500px; overflow: scroll;">
+  <ul>
+    {{#each model as |val|}}
+    <div class="infinity-svg-scrollEvent">
+      <svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        {{{val}}}
+      </svg>
+    </div>
+    {{/each}}
+  </ul>
+  {{my-component 
+    class="infinity-scrollable-scrollEvent" 
+    viewportSpyOverride=true
+    viewportIntersectionObserverOverride=false
+    viewportRAFOverride=false
+    scrollableAreaOverride=".list-scrollEvent"
+    infinityLoad=(action "infinityLoad")}}
+</div>

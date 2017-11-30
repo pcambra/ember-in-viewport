@@ -8,7 +8,7 @@ const Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('infinity');
-  this.route('infinity-basic');
+  this.route('infinity-scrollable');
 });
 
 export default Router;
