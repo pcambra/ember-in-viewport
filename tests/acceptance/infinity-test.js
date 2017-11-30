@@ -26,7 +26,7 @@ test('IntersectionObserver Component fetches more data when scrolled into viewpo
 });
 
 test('rAF Component fetches more data when scrolled into viewport', function(assert) {
-  visit('/infinity-scrollable');
+  visit('/infinity-scrollable-raf');
 
   andThen(() => {
     assert.equal(find('.infinity-svg-rAF').length, 10);
@@ -43,7 +43,7 @@ test('rAF Component fetches more data when scrolled into viewport', function(ass
 });
 
 test('scrollEvent Component fetches more data when scrolled into viewport', function(assert) {
-  visit('/infinity-scrollable');
+  visit('/infinity-scrollable-scrollevent');
 
   andThen(() => {
     assert.equal(find('.infinity-svg-scrollEvent').length, 10);
