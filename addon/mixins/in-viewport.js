@@ -82,7 +82,8 @@ export default Mixin.create({
 
     if (!get(this, 'viewportUseRAF')) {
       get(this, 'viewportListeners').forEach((listener) => {
-        const { context, event } = listener;
+        let { context, event } = listener;
+        context = get(this, 'scrollableArea') ? get(this, 'scrollableArea') : context;
         this._bindListeners(context, event);
       });
     }
@@ -258,7 +259,8 @@ export default Mixin.create({
     }
 
     get(this, 'viewportListeners').forEach((listener) => {
-      const { context, event } = listener;
+      let { context, event } = listener;
+      context = get(this, 'scrollableArea') ? get(this, 'scrollableArea') : context;
       $(context).off(`${event}.${elementId}`);
     });
 
