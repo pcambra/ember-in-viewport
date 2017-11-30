@@ -113,7 +113,7 @@ export default Mixin.create({
 
       this.observer = new IntersectionObserver(bind(this, this._onIntersection), options);
       this.observer.observe(element);
-    } else if (get(this, 'viewportUseRAF')) {
+    } else {
       const $contextEl = scrollableArea ? $(scrollableArea) : $(window);
       const boundingClientRect = element.getBoundingClientRect();
 
@@ -126,9 +126,11 @@ export default Mixin.create({
             get(this, 'viewportTolerance')
           )
         );
-        rAFIDS[get(this, 'elementId')] = window.requestAnimationFrame(
-          bind(this, this._setViewportEntered)
-        );
+        if (get(this, 'viewportUseRAF')) {
+          rAFIDS[get(this, 'elementId')] = window.requestAnimationFrame(
+            bind(this, this._setViewportEntered)
+          );
+        }
       }
     } 
   },

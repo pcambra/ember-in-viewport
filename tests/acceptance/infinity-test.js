@@ -27,6 +27,8 @@ test('IntersectionObserver Component fetches more data when scrolled into viewpo
     find('.infinity-scrollable').get(0).scrollIntoView();
   });
 
+  waitFor('.infinity-scrollable.inactive');
+
   andThen(() => {
     assert.equal(find('.infinity-svg').length, 20);
     assert.equal(find('.infinity-scrollable.inactive').length, 1, 'component is inactive after fetching more data');
@@ -41,6 +43,8 @@ test('rAF Component fetches more data when scrolled into viewport', function(ass
     assert.equal(find('.infinity-scrollable-rAF.inactive').length, 1, 'component is inactive before fetching more data');
     find('.infinity-scrollable-rAF').get(0).scrollIntoView();
   });
+
+  waitFor('.infinity-scrollable-rAF.inactive');
 
   andThen(() => {
     assert.equal(find('.infinity-svg-rAF').length, 20);
